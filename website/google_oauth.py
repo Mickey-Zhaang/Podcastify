@@ -37,7 +37,7 @@ def create_flow():
                     "https://www.googleapis.com/auth/userinfo.email",
                     "openid",
                     "https://www.googleapis.com/auth/gmail.readonly"],
-        redirect_uri = local_redirect
+        redirect_uri = web_redirect
     )
     return flow
 
