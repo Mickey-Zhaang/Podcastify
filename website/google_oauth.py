@@ -17,7 +17,9 @@ def create_flow():
     '''
     creates a flow object
     '''
-    web_redirect = "https://zhangtaskscheduler-45d23d6f047a.herokuapp.com/oauth2callback"
+    # web based: for heroku deployment
+    web_redirect = "https://zhangpodcastify-5e7788df03d9.herokuapp.com/"
+    # for local testing
     local_redirect = "http://localhost:5000/callback"
 
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -52,7 +54,6 @@ def auth():
     '''
     redirect_url = get_redirect_url()
     session["state"] = redirect_url["state"]
-    print(f"auth--------------Session State: {session['state']}")
     return redirect(redirect_url["auth_url"])
 
 @auth_blueprint.route('/callback')
@@ -76,4 +77,12 @@ def callback():
     id_info = id_token.verify_oauth2_token(id_token = credentials.id_token, request = token_request, audience = google_client_id)
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
+    session["credentials"] = {
+    "token": credentials.token,
+    "refresh_token": credentials.refresh_token,
+    "token_uri": credentials.token_uri,
+    "client_id": credentials.client_id,
+    "client_secret": credentials.client_secret,
+    "scopes": credentials.scopes
+    }
     return redirect("/")

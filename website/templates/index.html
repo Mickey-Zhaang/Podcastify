@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Podcastify</title>
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-      <!-- Custom CSS bcause Bootstrap yuck -->
-      <link rel="stylesheet" href="../static/style.css">
-   </head>
-  <body>
-    
-    <!-- Landing Page -->
-     <div class="">
-        <p class="inner-text">Hello</p>
-        <a href="auth">Auth</a>
-     </div>
+<head>
+  <meta charset="UTF-8">
+  <title>Landing Page</title>
+</head>
+<body>
+  <!-- Form to trigger the backend processing -->
+  <form action="{{ url_for('main.start_process') }}" method="POST">
+    <button type="submit">POST</button>
+  </form>
 
-  </body>
+  <!-- Display the podcast summary if available -->
+  {% if podcast %}
+    <textarea readonly rows="10" cols="80">{{ podcast }}</textarea>
+  {% else %}
+    <p>No podcast summary yet.</p>
+  {% endif %}
+</body>
 </html>
