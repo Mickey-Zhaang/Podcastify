@@ -25,11 +25,9 @@ def list_past_message_ids(service):
     return results
 
 def get_top_k_messages(k, results, service):
-    '''
-    gets the top k messages from the user's Gmail account
-        returns a list of message ids and thread ids
-    '''
-    # ChatGPTed
+    """
+    Gets the top k messages from the user's Gmail account and returns a list of EmailData objects.
+    """
     def decode_base64_data(data_str):
         missing_padding = len(data_str) % 4
         if missing_padding:
@@ -40,20 +38,29 @@ def get_top_k_messages(k, results, service):
     top_k_messages = results[:k] if len(results) > k else results
     message_ids = [message.get("id") for message in top_k_messages]
 
-    res_messages = [service.users().messages().get(userId="me",
-                                                   id=id,
-                                                   format="full").execute().get("payload") for id in message_ids]
+    res_messages = [
+        service.users().messages().get(userId="me", id=id, format="full").execute().get("payload")
+        for id in message_ids
+    ]
 
     top_k_emails = []
     for res in res_messages:
-        subjects = next((header.get("value") for header in res.get("headers", []) if header.get("name") == "Subject"),
-                        "No Subject")
-        body = res.get("parts")[0].get("body").get("data")
-        if body:
-            body = decode_base64_data(body)
+        subject = next(
+            (header.get("value") for header in res.get("headers", []) if header.get("name") == "Subject"),
+            "No Subject"
+        )
+        # Check if the message payload has 'parts'
+        if res.get("parts"):
+            body_data = res.get("parts")[0].get("body", {}).get("data")
+        else:
+            # If no parts, try the top-level 'body'
+            body_data = res.get("body", {}).get("data")
+
+        if body_data:
+            body = decode_base64_data(body_data)
         else:
             body = "Nothing here"
-        top_k_emails.append(EmailData(subjects, body))
+        top_k_emails.append(EmailData(subject, body))
     return top_k_emails
 
 def podcastify(res_messages, api_key):

@@ -26,7 +26,7 @@ def start_process():
     credientials = Credentials(**creds)
     service = build_service(credientials)
     past_messages_ids = list_past_message_ids(service)
-    top_k_messages = get_top_k_messages(20, past_messages_ids, service)
+    top_k_messages = get_top_k_messages(50, past_messages_ids, service)
 
     api_key = os.getenv("OPENAI_API_KEY")
     podcast = podcastify(top_k_messages, api_key)

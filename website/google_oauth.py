@@ -18,7 +18,7 @@ def create_flow():
     creates a flow object
     '''
     # web based: for heroku deployment
-    web_redirect = "https://zhangpodcastify-5e7788df03d9.herokuapp.com/"
+    web_redirect = "https://zhangpodcastify-5e7788df03d9.herokuapp.com/callback"
     # for local testing
     local_redirect = "http://localhost:5000/callback"
 
@@ -33,7 +33,10 @@ def create_flow():
                 "redirect_uris": [web_redirect, local_redirect],
             }
         },
-        scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
+        scopes = [ "https://www.googleapis.com/auth/userinfo.profile",
+                    "https://www.googleapis.com/auth/userinfo.email",
+                    "openid",
+                    "https://www.googleapis.com/auth/gmail.readonly"],
         redirect_uri = web_redirect
     )
     return flow
