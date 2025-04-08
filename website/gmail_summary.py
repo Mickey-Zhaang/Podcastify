@@ -77,8 +77,9 @@ def podcastify(res_messages, api_key):
         "role": "system",
         "content": (
             "You are given a list of emails, each containing a SUBJECT and MESSAGE. "
+            "IN THE FORM OF A PODCAST, form concise summaries of each email "
             "For any emails that don't have a meaningful body, say so but address the SUBJECT"
-            "Provide a single, concise, and engaging podcast summary "
+            "Any emails containing similar content, group together to address at once"
             "that captures the key points of all understandable emails."
         )
     },
