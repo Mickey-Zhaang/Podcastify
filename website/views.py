@@ -27,7 +27,7 @@ def start_process():
     if "credentials" not in session:
         return redirect(url_for("auth.auth"))
     creds = session.get("credentials")
-    if creds.expired:
+    if creds.get("expired"):
         creds.refresh(Request())
     credientials = Credentials(**creds)
     service = build_service(credientials)
