@@ -25,7 +25,7 @@ def create_app():
     app.config["GOOGLE_CLIENT_ID_WEB"] = os.environ.get("GOOGLE_CLIENT_ID_WEB")
     app.config["GOOGLE_CLIENT_SECRET_WEB"] = os.environ.get("GOOGLE_CLIENT_SECRET_WEB")
 
-    # Blueprint stuff
+    # register blueprints
     app.register_blueprint(main_blueprint)
     app.register_blueprint(auth_blueprint)
 
