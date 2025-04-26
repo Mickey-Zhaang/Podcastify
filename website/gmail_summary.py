@@ -23,7 +23,6 @@ def list_past_message_ids(service):
         only returns a list of id's and thread id's
     """
     results = service.users().messages().list(userId="me").execute()["messages"]
-
     return results
 
 
@@ -41,25 +40,13 @@ def get_top_k_messages(k, results, service):
 
     top_k_messages = results[:k] if len(results) > k else results
     message_ids = [message.get("id") for message in top_k_messages]
-
     res_messages = [
-        service.users()
-        .messages()
-        .get(userId="me", id=id, format="full")
-        .execute()
-        .get("payload")
-        for id in message_ids
+        service.users().messages().get(userId="me", id=id, format="full").execute().get("payload") for id in message_ids
     ]
-
     top_k_emails = []
     for res in res_messages:
         subject = next(
-            (
-                header.get("value")
-                for header in res.get("headers", [])
-                if header.get("name") == "Subject"
-            ),
-            "No Subject",
+            (header.get("value") for header in res.get("headers", []) if header.get("name") == "Subject"), "No Subject"
         )
         # Check if the message payload has 'parts'
         if res.get("parts"):
@@ -67,7 +54,6 @@ def get_top_k_messages(k, results, service):
         else:
             # If no parts, try the top-level 'body'
             body_data = res.get("body", {}).get("data")
-
         if body_data:
             body = decode_base64_data(body_data)
         else:

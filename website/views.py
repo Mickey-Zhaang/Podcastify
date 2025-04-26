@@ -5,12 +5,7 @@ views.py
 import os
 from google.oauth2.credentials import Credentials
 from flask import Blueprint, render_template, session, redirect, url_for
-from .gmail_summary import (
-    build_service,
-    list_past_message_ids,
-    get_top_k_messages,
-    podcastify,
-)
+from .gmail_summary import build_service, list_past_message_ids, get_top_k_messages, podcastify
 
 main_blueprint = Blueprint("main", __name__)
 
