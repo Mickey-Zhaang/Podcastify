@@ -15,6 +15,7 @@ def app(monkeypatch):
     app.config["TESTING"] = True
     app.config["OPENAI_API_KEY"] = "dummy_key"
     app.config["PROPAGATE_EXCEPTIONS"] = False
+    app.config["SECRET_KEY"] = "test-secret-key"
     return app
 
 
