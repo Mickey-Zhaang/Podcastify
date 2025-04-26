@@ -18,9 +18,7 @@ class EmailData:
         self.subject = subject
         # Filter the message if it appears to be "massive" in HTML content.
         if self._is_massive_html(message, html_tag_threshold, img_tag_threshold):
-            self.message = (
-                "[Filtered: Message contains too many HTML elements or images]"
-            )
+            self.message = "[Filtered: Message contains too many HTML elements or images]"
         else:
             self.message = message
 

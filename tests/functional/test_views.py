@@ -19,19 +19,19 @@ def test_redirects_when_not_logged_in(client):
     """
     GIVEN some client
     WHEN '/start-process' is requested
-    THEN check no 'credentials' in session → redirect to /auth
+    THEN check no 'credentials' in session → redirect to /index and a flash message
     """
 
     response = client.post("/start-process", follow_redirects=False)
-    assert response.status_code == 302
-    assert "/auth" in response.headers["Location"]
+    assert response.status_code == 200
+    assert b"Please log in before Podcastifying!" in response.data
 
 
 def test_internal_error_if_service_fails(monkeypatch, client):
     """
     GIVEN some client
     WHEN '/start-process' is requested with no creds
-    THEN check no 'credentials' in session → redirect to /auth
+    THEN check proper failure if no service fails
     """
     with client.session_transaction() as sess:
         sess["credentials"] = {"token": "token", "refresh_token": "lol"}
@@ -41,8 +41,8 @@ def test_internal_error_if_service_fails(monkeypatch, client):
 
     monkeypatch.setattr("website.views.build_service", fake_build)
 
-    resp = client.post("/start-process")
-    assert resp.status_code == 500
+    response = client.post("/start-process")
+    assert response.status_code == 500
 
 
 def test_successful_render(monkeypatch, client):

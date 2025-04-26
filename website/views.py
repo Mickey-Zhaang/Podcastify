@@ -3,9 +3,8 @@ views.py
 """
 
 import os
-from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
-from flask import Blueprint, render_template, session, redirect, url_for
+from flask import Blueprint, render_template, session, flash
 from .gmail_summary import build_service, list_past_message_ids, get_top_k_messages, podcastify
 
 main_blueprint = Blueprint("main", __name__)
@@ -25,10 +24,9 @@ def start_process():
     Processing in Landing page
     """
     if "credentials" not in session:
-        return redirect(url_for("auth.auth"))
+        flash("Please log in before Podcastifying!", "warning")
+        return render_template("index.html")
     creds = session.get("credentials")
-    if creds.get("expired"):
-        creds.refresh(Request())
     credientials = Credentials(**creds)
     service = build_service(credientials)
     past_messages_ids = list_past_message_ids(service)
