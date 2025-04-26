@@ -1,6 +1,7 @@
-'''
+"""
 Wesbite Factory: The Root
-'''
+"""
+
 import os
 from dotenv import load_dotenv
 from flask import Flask
@@ -9,10 +10,11 @@ from .google_oauth import auth_blueprint
 
 load_dotenv()
 
+
 def create_app():
-    '''
+    """
     Called by app.py to create a Flask App instance
-    '''
+    """
     app = Flask(__name__)
 
     app.config["DEBUG"] = True
@@ -23,7 +25,7 @@ def create_app():
     app.config["GOOGLE_CLIENT_ID_WEB"] = os.environ.get("GOOGLE_CLIENT_ID_WEB")
     app.config["GOOGLE_CLIENT_SECRET_WEB"] = os.environ.get("GOOGLE_CLIENT_SECRET_WEB")
 
-    # register blueprints
+    # Blueprint stuff
     app.register_blueprint(main_blueprint)
     app.register_blueprint(auth_blueprint)
 
