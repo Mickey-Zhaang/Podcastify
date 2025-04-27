@@ -3,7 +3,7 @@ google oauth file
 """
 
 import os
-from flask import request, session, redirect, Blueprint
+from flask import abort, request, session, redirect, Blueprint
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 from google.oauth2 import id_token
@@ -52,7 +52,7 @@ def get_redirect_url():
         returns: dict with authorization URL and state
     """
     flow = create_flow()
-    authorization_url, state = flow.authorization_url()
+    authorization_url, state = flow.authorization_url(access_type="offline", prompt="consent")
     return {"auth_url": authorization_url, "state": state}
 
 
