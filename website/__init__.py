@@ -18,7 +18,7 @@ def create_app():
     app = Flask(__name__)
 
     app.config["DEBUG"] = True
-    app.secret_key = os.environ.get("SECRET_KEY", "dev-fallback-key")
+    app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
     # API KEY STUFF
     app.config["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY")
     # Google Oauth
