@@ -3,7 +3,8 @@ testing the gmail_summary module
 '''
 
 from unittest.mock import MagicMock
-from website.gmail_summary import build_service, list_past_message_ids, get_top_k_messages
+from website.gmail_summary import build_service, list_past_message_ids, get_top_k_messages, podcastify
+from website.models import EmailData
 
 
 def test_build_service(monkeypatch):
@@ -35,18 +36,30 @@ def test_list_past_message_ids():
 
 def test_get_top_k_messages():
     '''
-    test's
+    test get_top_k_messages
     '''
-    # Dummy res_messages
     res_messages = {"headers": [{"name": "Subject", "value": "Testing Subject"}], "body": {"data": "VGVzdGluZyBEYXRh"}}
-    # define parameters for get_top_k_messages
     results = [{"id": 1, "1message": "1testing"}]
     service = MagicMock()
-    # mocks the service: patches res_messages in the get_top_k_messages
     service.users().messages().get.return_value.execute.return_value.get.return_value = res_messages
 
     resp = get_top_k_messages(1, results, service)
-    # The return is a list type, index into first element
     resp = resp[0]
     assert resp.get_subject() == "Testing Subject"
     assert resp.get_message() == "Testing Data"
+
+
+# def test_podcastify():
+#     '''
+#     tests podcastify
+#     '''
+#     res_messages = [EmailData("Testing Subject", "test 1")]
+
+#     dummy_response = MagicMock()
+#     dummy_response.choices = [MagicMock(message=MagicMock(content="Here's the Podcast"))]
+
+#     dummy_chat = MagicMock()
+#     dummy_chat.completion.create.return_value = dummy_response
+
+#     dummy_client = MagicMock()
+#     dummy_client.chat = dummy_chat
